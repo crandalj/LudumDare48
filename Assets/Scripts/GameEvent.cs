@@ -6,7 +6,7 @@ using static Enums;
 public class GameEvent : MonoBehaviour
 {
     public string eventTitle;
-    public string[] eventText;
+    public string eventText;
 
     public string choiceOne;
     public EventEffectType eventCostTypeOne;

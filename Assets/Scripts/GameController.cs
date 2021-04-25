@@ -14,6 +14,19 @@ public class GameController : MonoBehaviour
     public Text moraleText;
     public Text moneyText;
 
+    public GameObject EventMenu;
+    public Text eventTitle;
+    public Text eventText;
+    public Text eventChoiceOne;
+    public Text eventChoiceTwo;
+    public Text eventChoiceThree;
+
+    public GameEvent[] planetEvents;
+    public GameEvent[] shipEvents;
+
+    private bool eventActive;
+    private GameEvent _currentEvent;
+
     private Ship _ship;
 
     // Start is called before the first frame update
@@ -22,6 +35,8 @@ public class GameController : MonoBehaviour
         IntroMenu.SetActive(false);
         ActionMenu.SetActive(false);
         HUD.SetActive(false);
+        EventMenu.SetActive(false);
+        eventActive = false;
 
         _ship = new Ship();
         Intro();
@@ -47,7 +62,13 @@ public class GameController : MonoBehaviour
 
     public void Explore()
     {
-        // 
+        if (!eventActive)
+        {
+            eventActive = true;
+            // Get random Planet event
+            _currentEvent = planetEvents[Random.Range(0, (int)planetEvents.Length - 1)];
+            ShowEvent();
+        }
     }
 
     public void Warp()
@@ -60,12 +81,34 @@ public class GameController : MonoBehaviour
 
     public void Ship()
     {
-        // Open ship menu
-
+        if (!eventActive)
+        {
+            eventActive = true;
+            // Get random Ship event
+            _currentEvent = shipEvents[Random.Range(0, (int)shipEvents.Length - 1)];
+            ShowEvent();
+        }
     }
 
-    public void NewEvent()
+    private void ShowEvent()
     {
+        // disable action menu
+        ActionMenu.SetActive(false);
+        // update text menu
+        eventTitle.text = _currentEvent.eventTitle;
+        eventText.text = _currentEvent.eventText;
+        eventChoiceOne.text = _currentEvent.choiceOne;
+        eventChoiceTwo.text = _currentEvent.choiceTwo;
+        eventChoiceThree.text = _currentEvent.choiceThree;
+        // enable text menu
+        EventMenu.SetActive(true);
+    }
 
+    public void ProcessEvent(int choice)
+    {
+        if (eventActive)
+        {
+
+        }
     }
 }
