@@ -16,6 +16,15 @@ public class Ship
     public int Money { get { return _money; } set { _money = value; } }
     public int Distance { get { return _distance; } set { _distance = value; } }
 
+    public Ship()
+    {
+        _morale = 100;
+        _fuel = 100;
+        _health = 100;
+        _money = 50;
+        _distance = 0;
+    }
+
     public void UpdateMorale(int value)
     {
         _morale += value;
