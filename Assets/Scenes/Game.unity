@@ -2020,7 +2020,7 @@ MonoBehaviour:
   - {fileID: 9058093206670527242, guid: 86e0fa92cbf990941bf49b79ec91a2bb, type: 3}
   shipEvents:
   - {fileID: 5907821304181979377, guid: bd188d06e4bb496479282ea0b37d6be6, type: 3}
-  planetMaterial: {fileID: 2100000, guid: b5297309ba46b7946baf53dcd0eb5016, type: 2}
+  planetRenderer: {fileID: 51980575}
 --- !u!4 &857762721
 Transform:
   m_ObjectHideFlags: 0

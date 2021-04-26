@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     public GameEvent[] planetEvents;
     public GameEvent[] shipEvents;
 
-    public Material planetMaterial;
+    public Renderer planetRenderer;
     private Color planetColor;
 
     private bool eventActive;
@@ -96,10 +96,19 @@ public class GameController : MonoBehaviour
 
     public void Warp()
     {
-        // generate new system
+        if(_ship.Fuel >= 25)
+        {
+            // generate new system
 
-        // randomly select planet
+            // update resources
+            _ship.UpdateDistance(Random.Range(75, 150));
+            _ship.UpdateFuel(-25);
 
+            // randomly select planet
+            UpdatePlanetColor();
+
+            UpdateHUDText();
+        }
     }
 
     public void Ship()
@@ -219,11 +228,12 @@ public class GameController : MonoBehaviour
 
     private void UpdatePlanetColor()
     {
-        int r = Random.Range(0, 255);
-        int g = Random.Range(0, 255);
-        int b = Random.Range(0, 255);
-        planetColor = new Color(r, g, b);
-        planetMaterial.color = planetColor;
+        float r = Random.Range(0, 1f);
+        float g = Random.Range(0, 1f);
+        float b = Random.Range(0, 1f);
+        planetColor = new Color(r,g,b, 1);
+        //planetRenderer.material.SetColor("planet", planetColor);
+        planetRenderer.material.color = planetColor;
     }
 
     public void GameOver()
