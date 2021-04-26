@@ -30,7 +30,7 @@ public class Ship
         _morale += value;
 
         if (_morale > 100) _morale = 100;
-        if (_morale < 0) _morale = 0; //TODO
+        if (_morale <= 0) GameController.Instance.GameOver();
     }
 
     public void UpdateFuel(int value)
@@ -38,7 +38,7 @@ public class Ship
         _fuel += value;
 
         if (_fuel > 100) _fuel = 100;
-        if (_fuel < 0) _fuel = 0; //TODO
+        if (_fuel < 0) _fuel = 0; 
     }
 
     public void UpdateHealth(int value)
@@ -46,7 +46,7 @@ public class Ship
         _health += value;
 
         if (_health > 100) _health = 100;
-        if (_health < 0) _health = 0; //TODO
+        if (_health <= 0) GameController.Instance.GameOver();
     }
 
     public void UpdateMoney(int value)

@@ -1311,9 +1311,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 857762720}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: GameOver
+      - m_Target: {fileID: 857762719}
+        m_TargetAssemblyTypeName: SystemController, Assembly-CSharp
+        m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -6,6 +6,8 @@ using static Enums;
 
 public class GameController : MonoBehaviour
 {
+    public static GameController Instance;
+
     public GameObject IntroMenu;
     public GameObject ActionMenu;
     public GameObject HUD;
@@ -42,6 +44,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         IntroMenu.SetActive(false);
         ActionMenu.SetActive(false);
         HUD.SetActive(false);
