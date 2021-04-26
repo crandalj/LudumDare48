@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SystemController : MonoBehaviour
@@ -44,5 +45,10 @@ public class SystemController : MonoBehaviour
     public void DisableSubMenu(GameObject menu)
     {
         menu.SetActive(false);
+    }
+
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 }

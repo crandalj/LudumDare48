@@ -48,7 +48,7 @@ MonoBehaviour:
     of action.
   choiceOne: Spend 50M of funds on recreation
   eventCostTypeOne: 2
-  eventCostValueOne: 5
+  eventCostValueOne: -50
   eventEffectTypeOne: 4
   eventEffectValueOne: 25
   choiceTwo: Extend shifts to keep crew busy
