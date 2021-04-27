@@ -2151,8 +2151,8 @@ MonoBehaviour:
   SettingsTitle: {fileID: 399766210}
   ControlMenu: {fileID: 1640227339}
   AudioMenu: {fileID: 1652887646}
-  Sound: {fileID: 0}
-  Music: {fileID: 0}
+  Sound: {fileID: 985099582}
+  Music: {fileID: 910365334}
 --- !u!4 &963637199
 Transform:
   m_ObjectHideFlags: 0
