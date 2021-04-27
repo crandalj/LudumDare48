@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static Enums;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
@@ -29,6 +31,9 @@ public class GameController : MonoBehaviour
     public Text eventChoiceTwo;
     public Text eventChoiceThree;
 
+    public GameObject EventResultMenu;
+    public Text eventResultText;
+
     public GameEvent[] planetEvents;
     public GameEvent[] shipEvents;
 
@@ -38,17 +43,20 @@ public class GameController : MonoBehaviour
     private bool eventActive;
     private GameEvent _currentEvent;
 
+    private bool isGameover;
     private Ship _ship;
     private string _systemName;
 
     // Start is called before the first frame update
     void Start()
     {
+        isGameover = false;
         Instance = this;
         IntroMenu.SetActive(false);
         ActionMenu.SetActive(false);
         HUD.SetActive(false);
         EventMenu.SetActive(false);
+        EventResultMenu.SetActive(false);
         eventActive = false;
 
         _ship = new Ship();
@@ -102,7 +110,7 @@ public class GameController : MonoBehaviour
         if(_ship.Fuel >= 25)
         {
             // generate new system
-
+            _systemName = _systemNames[Random.Range(0, _systemNames.Length - 1)];
             // update resources
             _ship.UpdateDistance(Random.Range(75, 150));
             _ship.UpdateFuel(-25);
@@ -120,9 +128,257 @@ public class GameController : MonoBehaviour
         {
             eventActive = true;
             // Get random Ship event
-            _currentEvent = shipEvents[Random.Range(0, (int)shipEvents.Length - 1)];
+            // _currentEvent = shipEvents[Random.Range(0, (int)shipEvents.Length - 1)];
+            _currentEvent = GenerateShipEvent();
             ShowEvent();
         }
+    }
+
+    public GameEvent GenerateShipEvent()
+    {
+        GameEvent gameEvent = new GameEvent();
+
+        Type type = typeof(ShipEventType);
+        Array values = type.GetEnumValues();
+        int index = Random.Range(0, values.Length - 1);
+        ShipEventType eventType = (ShipEventType)values.GetValue(index);
+
+        gameEvent.eventTitle = eventType.ToString();
+        gameEvent.eventText = "The crew would like to focus on " + eventType.ToString() + "!";
+
+        // assign event types based on main event type
+        switch (eventType)
+        {
+            case ShipEventType.BUILD:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeOne = EventEffectType.MONEY;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.FUEL;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(5,25);
+                gameEvent.eventCostValueTwo = -Random.Range(5, 25);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case ShipEventType.DISCIPLINE:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeOne = EventEffectType.MORALE;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventEffectValueTwo = Random.Range(25, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(25, 75);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case ShipEventType.MAINTENANCE:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeOne = EventEffectType.MORALE;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventEffectValueTwo = Random.Range(25, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(25, 75);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case ShipEventType.REST:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.MORALE;
+                gameEvent.eventCostTypeOne = EventEffectType.MONEY;
+                gameEvent.eventEffectValueOne = Random.Range(20, 45);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(50, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(30, 50);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.HEALTH;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+        }
+        // assign choice based on event type and value
+        
+        gameEvent.choiceOne = "Get " + gameEvent.eventEffectTypeOne.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL) gameEvent.choiceOne = "Spend " + gameEvent.eventCostValueOne + " " + gameEvent.eventCostTypeOne.ToString() + " for " + gameEvent.eventEffectTypeOne.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL && gameEvent.eventEffectTypeOne == EventEffectType.NULL) gameEvent.choiceOne = "Lose " + gameEvent.eventCostValueOne + " " + gameEvent.eventCostTypeOne.ToString();
+        gameEvent.choiceTwo = "Get " + gameEvent.eventEffectTypeTwo.ToString();
+        if (gameEvent.eventCostTypeTwo != EventEffectType.NULL) gameEvent.choiceTwo = "Spend " + gameEvent.eventCostValueTwo + " " + gameEvent.eventCostTypeTwo.ToString() + " for " + gameEvent.eventEffectTypeTwo.ToString();
+        if (gameEvent.eventCostTypeTwo != EventEffectType.NULL && gameEvent.eventEffectTypeTwo == EventEffectType.NULL) gameEvent.choiceTwo = "Lose " + gameEvent.eventCostValueTwo + " " + gameEvent.eventCostTypeTwo.ToString();
+        gameEvent.choiceThree = "Get " + gameEvent.eventEffectTypeThree.ToString();
+        if (gameEvent.eventCostTypeThree != EventEffectType.NULL) gameEvent.choiceThree = "Spend " + gameEvent.eventCostValueThree + " " + gameEvent.eventCostTypeThree.ToString() + " for " + gameEvent.eventEffectTypeThree.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL && gameEvent.eventEffectTypeThree == EventEffectType.NULL) gameEvent.choiceThree = "Lose " + gameEvent.eventCostValueThree + " " + gameEvent.eventCostTypeThree.ToString();
+        return gameEvent;
+    }
+
+    public GameEvent GeneratePlanetEvent()
+    {
+        GameEvent gameEvent = new GameEvent();
+
+        Type type = typeof(PlanetEventType);
+        Array values = type.GetEnumValues();
+        int index = Random.Range(0, values.Length - 1);
+        PlanetEventType eventType = (PlanetEventType)values.GetValue(index);
+
+        gameEvent.eventTitle = eventType.ToString();
+        gameEvent.eventText = "The crew would like to focus on " + eventType.ToString() + "!";
+
+        // assign event types based on main event type
+        switch (eventType)
+        {
+            case PlanetEventType.COMBAT:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.NULL;
+                gameEvent.eventCostTypeOne = EventEffectType.NULL;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.FUEL;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(5, 25);
+                gameEvent.eventCostValueTwo = -Random.Range(5, 25);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.INVESTIGATE:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeOne = EventEffectType.MORALE;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventEffectValueTwo = Random.Range(25, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(25, 75);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.LAND:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeOne = EventEffectType.MORALE;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.HEALTH;
+                gameEvent.eventCostTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventEffectValueTwo = Random.Range(25, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(25, 75);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.MAP:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.MORALE;
+                gameEvent.eventCostTypeOne = EventEffectType.MONEY;
+                gameEvent.eventEffectValueOne = Random.Range(20, 45);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.MORALE;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(50, 75);
+                gameEvent.eventCostValueTwo = -Random.Range(30, 50);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.HEALTH;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.MINE:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.NULL;
+                gameEvent.eventCostTypeOne = EventEffectType.NULL;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.FUEL;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(5, 25);
+                gameEvent.eventCostValueTwo = -Random.Range(5, 25);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.RESEARCH:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.NULL;
+                gameEvent.eventCostTypeOne = EventEffectType.NULL;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.FUEL;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(5, 25);
+                gameEvent.eventCostValueTwo = -Random.Range(5, 25);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+            case PlanetEventType.TRADE:
+                // choice 1
+                gameEvent.eventEffectTypeOne = EventEffectType.NULL;
+                gameEvent.eventCostTypeOne = EventEffectType.NULL;
+                gameEvent.eventEffectValueOne = Random.Range(5, 25);
+                gameEvent.eventCostValueOne = -Random.Range(5, 25);
+                // choice 2
+                gameEvent.eventEffectTypeTwo = EventEffectType.FUEL;
+                gameEvent.eventCostTypeTwo = EventEffectType.MONEY;
+                gameEvent.eventEffectValueTwo = Random.Range(5, 25);
+                gameEvent.eventCostValueTwo = -Random.Range(5, 25);
+                // choice 3
+                gameEvent.eventEffectTypeThree = EventEffectType.NULL;
+                gameEvent.eventCostTypeThree = EventEffectType.MORALE;
+                gameEvent.eventEffectValueThree = 0;
+                gameEvent.eventCostValueThree = -Random.Range(5, 15);
+                break;
+        }
+        // assign choice based on event type and value
+
+        gameEvent.choiceOne = "Get " + gameEvent.eventEffectTypeOne.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL) gameEvent.choiceOne = "Spend " + gameEvent.eventCostValueOne + " " + gameEvent.eventCostTypeOne.ToString() + " for " + gameEvent.eventEffectTypeOne.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL && gameEvent.eventEffectTypeOne == EventEffectType.NULL) gameEvent.choiceOne = "Lose " + gameEvent.eventCostValueOne + " " + gameEvent.eventCostTypeOne.ToString();
+        gameEvent.choiceTwo = "Get " + gameEvent.eventEffectTypeTwo.ToString();
+        if (gameEvent.eventCostTypeTwo != EventEffectType.NULL) gameEvent.choiceTwo = "Spend " + gameEvent.eventCostValueTwo + " " + gameEvent.eventCostTypeTwo.ToString() + " for " + gameEvent.eventEffectTypeTwo.ToString();
+        if (gameEvent.eventCostTypeTwo != EventEffectType.NULL && gameEvent.eventEffectTypeTwo == EventEffectType.NULL) gameEvent.choiceTwo = "Lose " + gameEvent.eventCostValueTwo + " " + gameEvent.eventCostTypeTwo.ToString();
+        gameEvent.choiceThree = "Get " + gameEvent.eventEffectTypeThree.ToString();
+        if (gameEvent.eventCostTypeThree != EventEffectType.NULL) gameEvent.choiceThree = "Spend " + gameEvent.eventCostValueThree + " " + gameEvent.eventCostTypeThree.ToString() + " for " + gameEvent.eventEffectTypeThree.ToString();
+        if (gameEvent.eventCostTypeOne != EventEffectType.NULL && gameEvent.eventEffectTypeThree == EventEffectType.NULL) gameEvent.choiceThree = "Lose " + gameEvent.eventCostValueThree + " " + gameEvent.eventCostTypeThree.ToString();
+        return gameEvent;
     }
 
     private void ShowEvent()
@@ -198,9 +454,20 @@ public class GameController : MonoBehaviour
                         Debug.Log("Failed!");
                         break;
                 }
+                eventResultText.text = "You spent " + costValue + " " + costType.ToString();
+                if(effectType != EventEffectType.NULL)
+                {
+                    eventResultText.text += " and received " + effectValue + " " + effectType.ToString();
+                }
+            }
+            else
+            {
+                eventResultText.text = "Your ship received " + effectValue + " " + effectType.ToString();
             }
 
-            if(effectType != EventEffectType.NULL)
+            
+
+            if (effectType != EventEffectType.NULL)
             {
                 switch (effectType)
                 {
@@ -224,9 +491,18 @@ public class GameController : MonoBehaviour
 
             UpdateHUDText();
             EventMenu.SetActive(false);
+            EventResultMenu.SetActive(true);
+        }
+    }
+
+    public void CloseEvent()
+    {
+        if (!isGameover)
+        {         
             ActionMenu.SetActive(true);
             eventActive = false;
         }
+        EventResultMenu.SetActive(false);
     }
 
     private void UpdatePlanetColor()
@@ -241,9 +517,38 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
+        isGameover = true;
         EventMenu.SetActive(false);
         ActionMenu.SetActive(false);
         GameOverMenu.SetActive(true);
         GameOverText.text = "You journeyed into the depths of space, further than any human has gone... maybe, as it was only " + _ship.Distance + " light years from earth.";
     }
+
+    private string[] _systemNames = new string[]
+    {
+        "Kameeraska",
+        "Whiteridge",
+        "Edinborourgh",
+        "Kameeraska",
+        "Orkney",
+        "Southwold",
+        "Craydon",
+        "Holden",
+        "Myrefall",
+        "Limesvilles",
+        "Vustroria",
+        "Hengaetov",
+        "Benrigawa",
+        "Tholov",
+        "Hidilles",
+        "Cocarro",
+        "Ludenia",
+        "Dretanus",
+        "Gnilles AY",
+        "Kinocury",
+        "Yusomia",
+        "Lutis",
+        "Muchabos",
+        "Yewei"
+    };
 }

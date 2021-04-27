@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Enums;
 
-public class GameEvent : MonoBehaviour
+public class GameEvent
 {
     public string eventTitle;
     public string eventText;
