@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &895191409522597890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 893802464537628759}
+  - component: {fileID: 9058093206670527242}
+  m_Layer: 0
+  m_Name: Event
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &893802464537628759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895191409522597890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 362.4261, y: 315.38083, z: 384.3563}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9058093206670527242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895191409522597890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acf0cc42c12a94449a2617b5312b4fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventTitle: Explore the Planet
+  eventText: Your science advisor wants to send a team down, what is their goal?
+  choiceOne: Fuel materials
+  eventCostTypeOne: 0
+  eventCostValueOne: 0
+  eventEffectTypeOne: 3
+  eventEffectValueOne: 25
+  choiceTwo: Research subjects for money
+  eventCostTypeTwo: 0
+  eventCostValueTwo: 0
+  eventEffectTypeTwo: 2
+  eventEffectValueTwo: 50
+  choiceThree: Metals for repair
+  eventCostTypeThree: 0
+  eventCostValueThree: 0
+  eventEffectTypeThree: 1
+  eventEffectValueThree: 15
