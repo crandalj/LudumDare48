@@ -17,11 +17,11 @@ public class SystemController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Sound.value = PlayerPrefs.GetFloat("Sound", 0.5f);
-        Music.value = PlayerPrefs.GetFloat("Music", 0.5f);
-        SettingsMenu.SetActive(false);
-        ControlMenu.SetActive(false);
-        AudioMenu.SetActive(false);
+        if (Sound) Sound.value = PlayerPrefs.GetFloat("Sound", 0.5f);
+        if(Music) Music.value = PlayerPrefs.GetFloat("Music", 0.5f);
+        if(SettingsMenu) SettingsMenu.SetActive(false);
+        if(ControlMenu) ControlMenu.SetActive(false);
+        if(AudioMenu) AudioMenu.SetActive(false);
     }
 
     public void OnValueChanged()
